@@ -57,6 +57,8 @@ namespace DriveConverter.XML
 
         private string keyField;
 
+        private string nameField;
+
         private string typeField;
 
         private string valueField;
@@ -72,6 +74,20 @@ namespace DriveConverter.XML
             set
             {
                 this.keyField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string Name
+        {
+            get
+            {
+                return this.nameField;
+            }
+            set
+            {
+                this.nameField = value;
             }
         }
 

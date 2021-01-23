@@ -169,6 +169,9 @@ namespace DriveConverter
 
                 if (!int.TryParse(parameter.Key, out key))
                 {
+                    throw new InvalidDataException("Could not parse parameter key");
+
+                    /*
                     foreach (KeyValuePair<uint, string> keys in Parameters.Keys[handlingXml.Type.ToLower()])
                     {
                         if (keys.Value == parameter.Key)
@@ -178,6 +181,7 @@ namespace DriveConverter
                             break;
                         }
                     }
+                    */
                 }
 
                 foreach (KeyValuePair<uint, string> pair in Parameters.Types)
@@ -253,13 +257,15 @@ namespace DriveConverter
 
             foreach (Binary.Parameter parameter in binary.parameters)
             {
-                string key = Parameters.Keys[mostCapturedType].ContainsKey(parameter.Key) ? Parameters.Keys[mostCapturedType][parameter.Key] : parameter.Key.ToString();
+                string key = parameter.Key.ToString();
+                string name = Parameters.Keys[mostCapturedType].ContainsKey(parameter.Key) ? Parameters.Keys[mostCapturedType][parameter.Key] : null;
                 string type = Parameters.Types[parameter.Type];
                 string value = System.Convert.ToString(parameter.Value, CultureInfo.InvariantCulture); //parameter.Value.ToString();
 
                 HandlingParameter item = new HandlingParameter()
                 {
                     Key = key,
+                    Name = name,
                     Type = type,
                     Value = value
                 };

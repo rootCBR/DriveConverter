@@ -16,7 +16,7 @@ namespace DriveConverter.Files
         {
             public uint Key;
             public uint Type;
-            public double Value;
+            public object Value;
 
             public Parameter(uint key, uint type, object value)
             {
