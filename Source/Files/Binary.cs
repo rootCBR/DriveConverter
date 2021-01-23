@@ -16,13 +16,13 @@ namespace DriveConverter.Files
         {
             public uint Key;
             public uint Type;
-            public object Value;
+            public double Value;
 
             public Parameter(uint key, uint type, object value)
             {
                 this.Key = key;
                 this.Type = type;
-                this.Value = value;
+                this.Value = Convert.ToDouble(value, CultureInfo.InvariantCulture);
             }
         }
 

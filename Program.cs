@@ -195,7 +195,7 @@ namespace DriveConverter
                         value = uint.Parse(parameter.Value);
                         break;
                     case 2: // float
-                        value = float.Parse(parameter.Value, CultureInfo.InvariantCulture);
+                        value = double.Parse(parameter.Value, CultureInfo.InvariantCulture);
                         break;
                     default:
                         throw new NotSupportedException("Unknown value type");

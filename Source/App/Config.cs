@@ -132,8 +132,9 @@ namespace DriveConverter.App
         /*
             v1.00 23.01.2021 02:06
             v1.01 23.01.2021 22:47
+            v1.02 23.01.2021 23:41
         */
-        public static readonly string BuildVersion = "1.01";
+        public static readonly string BuildVersion = "1.02";
 
         public static string VersionString
         {
