@@ -58,7 +58,14 @@ namespace DriveConverter
             switch (fileExtension.ToLower())
             {
                 case ".bin":
-                    Export(path);
+                    if (Config.ExportProject == true)
+                    {
+                        ExportProject(path);
+                    }
+                    else
+                    {
+                        Export(path);
+                    }
                     break;
                 case ".xml":
                     Import(path);
@@ -220,6 +227,77 @@ namespace DriveConverter
             FileStream outputStream = File.OpenWrite(outputFilePath);
 
             binary.Serialize(outputStream);
+        }
+
+        static void ExportProject(string path)
+        {
+            Stream inputStream = new MemoryStream(File.ReadAllBytes(path));
+
+            Binary binary = new Binary();
+
+            binary.Deserialize(inputStream);
+
+            string outputFilePath = Path.ChangeExtension(Path.ChangeExtension(path, null), ".xml.handling");
+
+            List<HandlingProjectParameter> handlingXmlParameters = new List<HandlingProjectParameter>();
+
+            List<KeyValuePair<uint, string>> captures = new List<KeyValuePair<uint, string>>();
+
+            foreach (KeyValuePair<string, Dictionary<uint, string>> types in Parameters.Keys)
+            {
+                uint numberOfMatches = 0;
+
+                foreach (Binary.Parameter parameter in binary.parameters)
+                {
+                    if (types.Value.ContainsKey(parameter.Key))
+                    {
+                        numberOfMatches++;
+
+                        string match = types.Value[parameter.Key];
+                    }
+                }
+
+                captures.Add(new KeyValuePair<uint, string>(numberOfMatches, types.Key));
+            }
+
+            string mostCapturedType = captures.OrderByDescending(keySelector => keySelector.Key).First().Value;
+
+            foreach (Binary.Parameter parameter in binary.parameters)
+            {
+                string key = parameter.Key.ToString();
+                string type = parameter.Type.ToString();
+                string value = System.Convert.ToString(parameter.Value, CultureInfo.InvariantCulture);
+
+                HandlingProjectParameter item = new HandlingProjectParameter()
+                {
+                    Key = key,
+                    Type = type,
+                    Value = value
+                };
+
+                handlingXmlParameters.Add(item);
+            }
+
+            HandlingProject handlingXml = new HandlingProject()
+            {
+                ID = "860837444",
+                Version = "2",
+                Parameter = handlingXmlParameters.ToArray()
+            };
+
+            using (var writer = new StreamWriter(outputFilePath))
+            {
+                var serializer = new XmlSerializer(typeof(HandlingProject));
+
+                using (var xmlWriter = XmlWriter.Create(writer, new XmlWriterSettings { Indent = true, NewLineOnAttributes = true }))
+                {
+                    serializer.Serialize(xmlWriter, handlingXml);
+
+                    xmlWriter.Close();
+                }
+
+                writer.Close();
+            }
         }
 
         static void Export(string path)

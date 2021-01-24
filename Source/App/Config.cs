@@ -112,6 +112,7 @@ namespace DriveConverter.App
 
         public static string Input;
         public static string HandlingType;
+        public static bool ExportProject;
 
         public static IEnumerable<ArgumentInfo> Arguments
         {
@@ -134,8 +135,9 @@ namespace DriveConverter.App
             v1.01 23.01.2021 22:47
             v1.02 23.01.2021 23:41
             v1.03 24.01.2021 00:39
+            v1.04 24.01.2021 01:07
         */
-        public static readonly string BuildVersion = "1.03";
+        public static readonly string BuildVersion = "1.04";
 
         public static string VersionString
         {
@@ -209,7 +211,12 @@ namespace DriveConverter.App
                 {
                     if (arg.IsSwitch)
                     {
-
+                        switch (arg.Name)
+                        {
+                            case "project":
+                                ExportProject = true;
+                                break;
+                        }
                     }
                     else
                     {
